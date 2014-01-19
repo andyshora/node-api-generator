@@ -1,6 +1,6 @@
 var express = require('express'),
 	wine = require('./routes/wines'),
-	wine = require('./routes/cheeses');
+	cheese = require('./routes/cheeses');
  
 var app = express();
 
@@ -15,11 +15,11 @@ app.post('/wines', wine.add);
 app.put('/wines/:id', wine.update);
 app.delete('/wines/:id', wine.delete);
 
-app.get('/cheeses', wine.getAll);
-app.get('/cheeses/:id', wine.get);
-app.post('/cheeses', wine.add);
-app.put('/cheeses/:id', wine.update);
-app.delete('/cheeses/:id', wine.delete);
+app.get('/cheeses', cheese.getAll);
+app.get('/cheeses/:id', cheese.get);
+app.post('/cheeses', cheese.add);
+app.put('/cheeses/:id', cheese.update);
+app.delete('/cheeses/:id', cheese.delete);
  
 app.listen(3000);
 console.log('Listening on port 3000...');
