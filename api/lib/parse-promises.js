@@ -11,12 +11,14 @@ module.exports = {
 	getObject: function (className, id) {
 		var deferred = Q.defer();
 		parse.getObject(className, id, {}, function(err, response, body, success) {
-			if (err) {
-				deferred.reject(err);
-			} else if (body.error) {
-				deferred.reject(body);
-			} else {
+			if (success) {
 				deferred.resolve(body);
+			} else if (err) {
+				deferred.reject(500);
+			} else if (body.error) {
+				deferred.reject(404);
+			} else {
+				deferred.reject(500);
 			}
 		});
 		return deferred.promise;
@@ -24,12 +26,14 @@ module.exports = {
 	getObjects: function (className) {
 		var deferred = Q.defer();
 		parse.getObjects(className, function(err, response, body, success) {
-			if (err) {
-				deferred.reject(err);
-			} else if (body.error) {
-				deferred.reject(body);
-			} else {
+			if (success) {
 				deferred.resolve(body);
+			} else if (err) {
+				deferred.reject(500);
+			} else if (body.error) {
+				deferred.reject(404);
+			} else {
+				deferred.reject(500);
 			}
 		});
 		return deferred.promise;
@@ -37,12 +41,14 @@ module.exports = {
 	addObject: function (className, newData) {
 		var deferred = Q.defer();
 		parse.createObject(className, newData, function(err, response, body, success) {
-			if (err) {
-				deferred.reject(err);
-			} else if (body.error) {
-				deferred.reject(body);
-			} else {
+			if (success) {
 				deferred.resolve(body);
+			} else if (err) {
+				deferred.reject(500);
+			} else if (body.error) {
+				deferred.reject(404);
+			} else {
+				deferred.reject(500);
 			}
 		});
 		return deferred.promise;
@@ -50,12 +56,14 @@ module.exports = {
 	updateObject: function (className, id, updateData) {
 		var deferred = Q.defer();
 		parse.updateObject(className, id, updateData, function(err, response, body, success) {
-			if (err) {
-				deferred.reject(err);
-			} else if (body.error) {
-				deferred.reject(body);
-			} else {
+			if (success) {
 				deferred.resolve(body);
+			} else if (err) {
+				deferred.reject(500);
+			} else if (body.error) {
+				deferred.reject(404);
+			} else {
+				deferred.reject(500);
 			}
 		});
 		return deferred.promise;
@@ -63,12 +71,14 @@ module.exports = {
 	deleteObject: function (className, id) {
 		var deferred = Q.defer();
 		parse.deleteObject(className, id, function(err, response, body, success) {
-			if (err) {
-				deferred.reject(err);
-			} else if (body.error) {
-				deferred.reject(body);
-			} else {
+			if (success) {
 				deferred.resolve(body);
+			} else if (err) {
+				deferred.reject(500);
+			} else if (body.error) {
+				deferred.reject(404);
+			} else {
+				deferred.reject(500);
 			}
 		});
 		return deferred.promise;

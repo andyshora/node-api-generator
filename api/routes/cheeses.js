@@ -1,6 +1,6 @@
 var parseService = require('../lib/parse-promises');
 
-var className = 'wines';
+var className = 'cheeses';
 
 exports.getAll = function(req, res) {
 
