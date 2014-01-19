@@ -72,7 +72,7 @@ module.exports = {
 		var deferred = Q.defer();
 		parse.deleteObject(className, id, function(err, response, body, success) {
 			if (success) {
-				deferred.resolve(body);
+				deferred.resolve(204);
 			} else if (err) {
 				deferred.reject(500);
 			} else if (body.error) {

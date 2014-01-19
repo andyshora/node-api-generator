@@ -2,6 +2,15 @@ var parseService = require('../lib/parse-promises');
 
 var className = 'cheeses';
 
+exports.options = function(req, res) {
+	res.writeHead(200, {'Content-Type': 'text/plain', 'Allow': 'GET,POST,PUT,DELETE,HEAD,OPTIONS'});
+	res.send();
+};
+
+exports.head = function(req, res) {
+	res.send(204);
+};
+
 exports.getAll = function(req, res) {
 
 	parseService.getObjects(className)
@@ -51,7 +60,7 @@ exports.delete = function(req, res) {
 	
 	parseService.deleteObject(className, id)
 		.then(function(data) {
-			res.send({ success: true, objectId: id });
+			res.send(data);
 		}, function(data) {
 			res.send(data);
 		});
