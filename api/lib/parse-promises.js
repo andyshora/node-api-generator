@@ -1,6 +1,6 @@
 // instantiate
-var APP_ID = 'uX77K4d7z4PnWODj6Rr1YkJwAIsFHQp4aMeDa4mm';
-var REST_API_KEY = 'xIfE9g6vDdZMvA6nYxF0kfuVnbyswUO2AlY159T7';
+var APP_ID = '';
+var REST_API_KEY = '';
 
 var Kaiseki = require('./kaiseki'),
 	Q = require('q');
