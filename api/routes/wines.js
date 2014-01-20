@@ -1,5 +1,6 @@
 var parseService = require('../lib/parse-promises'),
-	validationService = require('../lib/validation');
+	validationService = require('../lib/validation'),
+	_ = require('underscore');
 
 var className = 'wines';
 
@@ -72,7 +73,7 @@ spec.PUT = {
 			year: {
 				type: 'number',
 				description: 'wine year',
-				required: true
+				required: false
 			}
 		},
 		example: {
@@ -145,21 +146,23 @@ exports.add = function(req, res) {
 };
 
 exports.update = function(req, res) {
-	var wine = req.body;
+	var requestFields = req.body;
 	var id = req.params.id;
 
-	var validationErrors = validationService.validate([
-		{ type: 'objectId', field: 'id', value: id, required: true },
-		{ type: 'string', field: 'wine.name', value: wine.name, required: false },
-		{ type: 'number', field: 'wine.year', value: wine.year, required: false }
-	]);
+
+	var validationFields = _.map(spec.PUT.update.parameters, function(field, key) {
+		var val = ('url' in field && field.url) ?  req.params[key] : requestFields[key];
+		return { type: field.type, field: key, value: val, required: field.required };
+	});
+
+	var validationErrors = validationService.validate(validationFields);
 
 	if (validationErrors.length) {
 		res.send(400, { errors: validationErrors });
 	} else {
 
 		// safe to perform update
-		parseService.updateObject(className, id, wine)
+		parseService.updateObject(className, id, requestFields)
 			.then(function(data) {
 				res.send(data);
 			}, function(data) {

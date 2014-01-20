@@ -25,7 +25,7 @@ module.exports = {
 				errors.push({ field: d.field, value: d.value, type: d.type, message: 'Required field was not specified.' });
 			} else if ((d.type === 'string') && !_validateString(d.value)) {
 				errors.push({ field: d.field, value: d.value, type: d.type, message: 'String expected, but ' + (typeof d.value) + ' specified.' });
-			} else if ((d.type === 'number') && !_validateString(d.value)) {
+			} else if ((d.type === 'number') && !_validateNumber(d.value)) {
 				errors.push({ field: d.field, value: d.value, type: d.type, message: 'Number expected, but ' + (typeof d.value) + ' specified.' });
 			} else if ((d.type === 'objectId') && !_validateObjectId(d.value)) {
 				errors.push({ field: d.field, value: d.value, type: d.type, message: 'Invalid objectId specified.' });
