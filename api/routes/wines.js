@@ -3,9 +3,109 @@ var parseService = require('../lib/parse-promises'),
 
 var className = 'wines';
 
+var spec = {};
+
+// create
+spec.POST = {
+	create: {
+		uri: '/wines',
+		description: 'Create a new wine record',
+		parameters: {
+			name: {
+				type: 'string',
+				description: 'wine name',
+				required: true
+			},
+			year: {
+				type: 'number',
+				description: 'wine year',
+				required: true
+			}
+		},
+		example: {
+			name: 'Tintos de Mar',
+			year: 2005
+		}
+	}
+};
+
+// read
+spec.GET = {
+	single: {
+		uri: '/wines/:id',
+		description: 'Get a single wine record',
+		parameters: {
+			id: {
+				type: 'string',
+				url: true,
+				description: 'objectId',
+				required: true
+			}
+		},
+		example: {}
+	},
+	all: {
+		uri: '/wines',
+		description: 'Get all wine records',
+		parameters: {},
+		example: {}
+	}
+};
+
+// update
+spec.PUT = {
+	update: {
+		uri: '/wines/:id',
+		description: 'Update a wine record',
+		parameters: {
+			id: {
+				type: 'string',
+				url: true,
+				description: 'objectId',
+				required: true
+			},
+			name: {
+				type: 'string',
+				description: 'wine name',
+				required: true
+			},
+			year: {
+				type: 'number',
+				description: 'wine year',
+				required: true
+			}
+		},
+		example: {
+			id: 'abcde12345',
+			name: 'Tintos de Mar',
+			year: 2005
+		}
+	}
+};
+
+// delete
+spec.DELETE = {
+	delete: {
+		uri: '/wines/:id',
+		description: 'Delete a wine record',
+		parameters: {
+			id: {
+				type: 'string',
+				url: true,
+				description: 'objectId',
+				required: true
+			}
+		}
+	}
+};
+
+
 exports.options = function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', 'Allow': 'GET,POST,PUT,DELETE,HEAD,OPTIONS'});
-	res.send();
+	res.set({
+		'Allow': 'GET,POST,PUT,DELETE,HEAD,OPTIONS',
+		'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,HEAD,OPTIONS'
+	});
+	res.send(spec);
 };
 
 exports.head = function(req, res) {
