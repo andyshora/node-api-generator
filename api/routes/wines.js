@@ -1,105 +1,9 @@
 var parseService = require('../lib/parse-promises'),
 	validationService = require('../lib/validation'),
-	_ = require('underscore');
+	_ = require('underscore'),
+	spec = require('../specs/wines-spec.js');
 
-var className = 'wines';
-
-var spec = {};
-
-// create
-spec.POST = {
-	create: {
-		uri: '/wines',
-		description: 'Create a new wine record',
-		parameters: {
-			name: {
-				type: 'string',
-				description: 'wine name',
-				required: true
-			},
-			year: {
-				type: 'number',
-				description: 'wine year',
-				required: true
-			}
-		},
-		example: {
-			name: 'Tintos de Mar',
-			year: 2005
-		}
-	}
-};
-
-// read
-spec.GET = {
-	single: {
-		uri: '/wines/:id',
-		description: 'Get a single wine record',
-		parameters: {
-			id: {
-				type: 'string',
-				url: true,
-				description: 'objectId',
-				required: true
-			}
-		},
-		example: {}
-	},
-	all: {
-		uri: '/wines',
-		description: 'Get all wine records',
-		parameters: {},
-		example: {}
-	}
-};
-
-// update
-spec.PUT = {
-	update: {
-		uri: '/wines/:id',
-		description: 'Update a wine record',
-		parameters: {
-			id: {
-				type: 'string',
-				url: true,
-				description: 'objectId',
-				required: true
-			},
-			name: {
-				type: 'string',
-				description: 'wine name',
-				required: true
-			},
-			year: {
-				type: 'number',
-				description: 'wine year',
-				required: false
-			}
-		},
-		example: {
-			id: 'abcde12345',
-			name: 'Tintos de Mar',
-			year: 2005
-		}
-	}
-};
-
-// delete
-spec.DELETE = {
-	delete: {
-		uri: '/wines/:id',
-		description: 'Delete a wine record',
-		parameters: {
-			id: {
-				type: 'string',
-				url: true,
-				description: 'objectId',
-				required: true
-			}
-		}
-	}
-};
-
+var className = spec.className;
 
 exports.options = function(req, res) {
 	res.set({
@@ -135,14 +39,30 @@ exports.get = function(req, res) {
 };
 
 exports.add = function(req, res) {
-	var wine = req.body;
+	var requestFields = req.body;
 
-	parseService.addObject(className, wine)
-		.then(function(data) {
-			res.send(data);
-		}, function(data) {
-			res.send(data);
-		});
+	
+	var validationFields = _.map(spec.POST.create.parameters, function(field, key) {
+		var val = ('url' in field && field.url) ?  req.params[key] : requestFields[key];
+		return { type: field.type, field: key, value: val, required: field.required };
+	});
+
+	var validationErrors = validationService.validate(validationFields);
+
+	if (validationErrors.length) {
+		res.send(400, { errors: validationErrors });
+
+	} else {
+
+		// safe to perform add
+		parseService.addObject(className, requestFields)
+			.then(function(data) {
+				res.send(data);
+			}, function(data) {
+				res.send(data);
+			});
+
+	}
 };
 
 exports.update = function(req, res) {
@@ -159,6 +79,7 @@ exports.update = function(req, res) {
 
 	if (validationErrors.length) {
 		res.send(400, { errors: validationErrors });
+
 	} else {
 
 		// safe to perform update
